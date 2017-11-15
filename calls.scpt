@@ -379,6 +379,34 @@ function getItemsFromSafari() {
 
 
 /**
+ * getItemsFromChrome - Create parsable string of task and indented notes from currently
+ * Selected Mail items.
+ *
+ * @return {string}  Possibly multiline list, suitable for calls to createItemsIn
+ */
+function getItemsFromChrome() {
+
+    var chrome = Application('Google Chrome')
+    var doc = chrome.documents[0]
+    var currentTab = chrome.windows[0].currentTab
+	var url = chrome.windows[0].activeTab.url()
+	var name = chrome.windows[0].activeTab.name()
+	var selection = chrome.windows[0].getselection.toString()
+
+    var lines = []
+    lines.push('- Read page: “' + name + '”')
+    lines.push('\t\t' + url)
+    if (selection.length > 0 ){
+        var selectionLines = selection.split('\n')
+        lines.push('\t\t"' + selectionLines.join('\n\t\t') + '"')
+    }
+
+    return lines.join('\n')
+
+}
+
+
+/**
  * collapseOrExpandAllNotes - set expansion state of all nodes with notes
  * * @param {string} desiredState 'Collapsed' or 'Expanded'
  */
