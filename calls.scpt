@@ -427,6 +427,32 @@ function getItemsFromChrome() {
 
 
 /**
+ * getItemsFromVivaldi - Create parsable string of task and indented notes from currently
+ * Selected Mail items.
+ *
+ * @return {string}  Possibly multiline list, suitable for calls to createItemsIn
+ */
+function getItemsFromVivaldi() {
+
+    var chrome = Application('Vivaldi')
+    var currentTab = chrome.windows[0].activeTab
+    var url = currentTab.url()
+    var name = currentTab.name()
+    var selection = currentTab.execute({javascript:'window.getSelection().toString()'})
+
+    var lines = []
+    lines.push('- Read page: “' + name + '”')
+    lines.push('\t\t' + url)
+    if (selection.length > 0 ){
+        var selectionLines = selection.split('\n')
+        lines.push('\t\t"' + selectionLines.join('\n\t\t') + '"')
+    }
+
+    return lines.join('\n')
+}
+
+
+/**
  * collapseOrExpandAllNotes - set expansion state of all nodes with notes
  * * @param {string} desiredState 'Collapsed' or 'Expanded'
  */
